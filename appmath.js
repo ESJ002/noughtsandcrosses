@@ -1,6 +1,9 @@
 const allSquares = document.querySelectorAll('.square');
-const resetButton = document.querySelector('button')
+const resetButton = document.querySelector('.reset-btn')
 const playersTurnMessage = document.querySelector('.player-turn')
+const question = document.querySelector('.question')
+const answer = document.querySelector('.math-answer')
+const input = document.querySelector('input')
 const winCombinations = [
     ['1','2','3'], // Top Row
     ['4','5','6'], // Middle Row
@@ -12,7 +15,6 @@ const winCombinations = [
     ['3','5','7'], // Diagonal Right-Left
 ]
 
-
 for (let square of allSquares) {
     activateSquares(square) // Add event listener click to all squares.
 }
@@ -21,16 +23,26 @@ let isPlayer1Turn = true; // Player 1 Goes First
 let player1Scores = [] // Player 1 Scores
 let player2Scores = [] // Player 2 Scores
 
+function generateMathQuestion() {
+    const num1 = Math.floor(Math.random() * 10);
+    const num2 = Math.floor(Math.random() * 10);
+    const operator = ['+', '-','*'][Math.floor(Math.random() * 3)];
+    const question = `${num1} ${operator} ${num2}`
+    const answer = eval(question);
+    return { question, answer };
+}
+
 function handleSquareClick(event) {
     const square = event.target;
-    if (isPlayer1Turn) {
-        changeToCross(square); // Change to cross if Player 1 turn
+    const mathQuestion = generateMathQuestion();
+    question.textContent = mathQuestion.question
+    const playerAnswer = prompt(`${mathQuestion.question} =`)
+    if (playerAnswer !== null && Number(playerAnswer) === mathQuestion.answer) {
+            correctAnswer(square)
     } else {
-        changeToNought(square); // Change to nought if Player 2 turn
+        wrongAnswer();
     }
-    deactivateSquare(square) // Remove cursor on clicked square
-    checkForWinner()
-    isPlayer1Turn = !isPlayer1Turn; // Toggle whose turn it is.
+isPlayer1Turn = !isPlayer1Turn; // Toggle whose turn it is.
 }
 
 
@@ -51,19 +63,36 @@ function checkForWinner() {
     }
 }
 
+function correctAnswer(square) {
+    if (isPlayer1Turn) {
+        changeToCross(square); // Change to cross if Player 1 turn
+    } else {
+        changeToNought(square); // Change to nought if Player 2 turn
+    }
+deactivateSquare(square) // Remove cursor on clicked square
+checkForWinner()
+}
 
 function changeToCross(square) {
     square.style.color = 'lime'; // Color to Lime
     square.textContent = 'X' // Insert 'X'
     player1Scores.push(square.dataset.num) // Add square to Player 1 scores.
-    playersTurnMessage.textContent = `IT'S PLAYER 2 'S TURN` // Change Turn Text
+    playersTurnMessage.textContent = `CORRECT! IT'S PLAYER 2 'S TURN` // Change Turn Text
 }
 
 function changeToNought(square) {
     square.style.color = 'red'; // Color to Red
     square.textContent = 'O' // Insert 'O'
     player2Scores.push(square.dataset.num) // Add square to Player 2 scores.
-    playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN` // Change Turn Text
+    playersTurnMessage.textContent = `CORRECT! IT'S PLAYER 1 'S TURN` // Change Turn Text
+}
+
+function wrongAnswer() {
+    if (isPlayer1Turn) {
+        playersTurnMessage.textContent = `WRONG! IT'S PLAYER 2 'S TURN`
+    } else {
+        playersTurnMessage.textContent = `WRONG! IT'S PLAYER 1 'S TURN`
+    } 
 }
 
 resetButton.addEventListener('click', resetGame)
@@ -107,3 +136,11 @@ function deactivateSquare(square) {
         square.style.cursor = 'default' // Remove cursor pointer from square
 }
 
+function submitAnswer(playerAnswer) {
+    if (playerAnswer !== null && Number(playerAnswer) === mathQuestion.answer) {
+        correctAnswer(square)
+} else {
+    wrongAnswer();
+}
+isPlayer1Turn = !isPlayer1Turn;
+}

@@ -51,8 +51,8 @@ mathQuestionLine.style.display = 'none'
 grid.style.display = 'none'
 
 function generateMathQuestion() {
-    const num1 = Math.floor(Math.random() * mathDifficulty);
-    const num2 = Math.floor(Math.random() * mathDifficulty);
+    const num1 = Math.floor(Math.random() * mathDifficulty + 1);
+    const num2 = Math.floor(Math.random() * mathDifficulty + 1);
     const operator = ['+', '-','*'][Math.floor(Math.random() * 3)];
     const question = `${num1} ${operator} ${num2}`
     const answer = eval(question);
@@ -62,7 +62,7 @@ function generateMathQuestion() {
 function handleSquareClick(event) {
     const square = event.target;
     const mathQuestion = generateMathQuestion();
-    question.textContent = mathQuestion.question
+    question.textContent = mathQuestion.question.replace('*','×')
     mathQuestionLine.style.display = 'initial'
     square.style.border = '4px solid lime'
     square.classList.add('clicked')
@@ -73,7 +73,7 @@ function handleSquareClick(event) {
 
 function getAnswer() {
     const playerAnswer = Number(input.value);
-    const mathAnswer = eval(question.textContent)
+    const mathAnswer = eval(question.textContent.replace('×','*'))
     input.value = ''; 
     let square = document.querySelector('.clicked')
     mathQuestionLine.style.display = 'none'

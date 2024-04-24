@@ -5,6 +5,8 @@ const question = document.querySelector('.question') // Math Question
 const answerButton = document.querySelector('.answer-btn') // Submit Button
 const input = document.querySelector('input') // Input Section
 const mathQuestionLine = document.querySelector('.math-q') // Whole Question Line
+const player1WinCount = document.querySelector('.player-1-wins')
+const player2WinCount = document.querySelector('.player-2-wins')  // Player 1 Win Counter
 const winCombinations = [
     ['1','2','3'], // Top Row
     ['4','5','6'], // Middle Row
@@ -23,6 +25,8 @@ for (let square of allSquares) {
 let isPlayer1Turn = true; // Player 1 Goes First
 let player1Scores = [] // Player 1 Scores
 let player2Scores = [] // Player 2 Scores
+let player1Wins = 0
+let player2Wins = 0
 mathQuestionLine.style.display = 'none'
 
 function generateMathQuestion() {
@@ -127,6 +131,12 @@ function winner(player) {
     for (let square of allSquares) { //cycle through all squares
         deactivateSquare(square) // Deactivate squares
     }
+    if (player === 'PLAYER 1') {;
+        player1WinCount.textContent = Number(player1WinCount.textContent) + 1
+    }
+    if (player === 'PLAYER 2') {;
+        player2WinCount.textContent = Number(player2WinCount.textContent) + 1
+    }
     playersTurnMessage.textContent = `${player} WINS!` // Add Winning Message
     resetButton.style.display = 'initial' // Reveal Reset Button
 }
@@ -146,8 +156,12 @@ function resetGame() {
         square.classList.remove('completed')
         square.classList.remove('clicked')
     }
-    playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
-    isPlayer1Turn = true
+    
+    if (isPlayer1Turn) {
+        playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
+    } else {
+        playersTurnMessage.textContent = `IT'S PLAYER 2 'S TURN`
+    }
     player1Scores = []
     player2Scores = []
     resetButton.style.display = 'none' // Hide Reset Button
@@ -161,14 +175,4 @@ function activateSquare(square) {
 function deactivateSquare(square) {
     square.removeEventListener('click', handleSquareClick); // Make square unclickable
     square.style.cursor = 'default' // Remove cursor pointer from square
-
-}
-
-function submitAnswer(playerAnswer) {
-    if (playerAnswer !== null && Number(playerAnswer) === mathQuestion.answer) {
-        correctAnswer(square)
-} else {
-    wrongAnswer(square);
-}
-isPlayer1Turn = !isPlayer1Turn;
 }

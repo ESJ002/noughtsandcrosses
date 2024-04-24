@@ -69,3 +69,14 @@ body {
     font-weight: bold;
     font-size: 17px;
   }
+
+  .win-counter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 500px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    margin-bottom: 0;
+  }

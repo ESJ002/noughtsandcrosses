@@ -5,6 +5,8 @@ const question = document.querySelector('.question') // Math Question
 const answerButton = document.querySelector('.answer-btn') // Submit Button
 const input = document.querySelector('input') // Input Section
 const mathQuestionLine = document.querySelector('.math-q') // Whole Question Line
+mathQuestionLine.style.display = 'none'
+
 const winCombinations = [
     ['1','2','3'], // Top Row
     ['4','5','6'], // Middle Row
@@ -145,21 +147,3 @@ function submitAnswer(playerAnswer) {
 }
 isPlayer1Turn = !isPlayer1Turn;
 }
-
-// answerButton.addEventListener('click', getAnswer)
-
-// function getAnswer(square) {
-//     const playerAnswer = Number(input.value);
-//     input.value = ''; 
-//     input.style.display = 'none'; 
-//     answerButton.style.display = 'none'; 
-//     if (!isNaN(playerAnswer)) { 
-//         if (playerAnswer === currentMathQuestion.answer) {
-//             correctAnswer(square);
-//         } else {
-//             wrongAnswer(square);
-//         }
-//         isPlayer1Turn = !isPlayer1Turn;
-//     }
-// }
-

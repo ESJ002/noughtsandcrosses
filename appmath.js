@@ -17,12 +17,13 @@ const winCombinations = [
 ]
 
 for (let square of allSquares) {
-    activateSquares(square) // Add event listener click to all squares.
+    activateSquare(square) // Add event listener click to all squares.
 }
 
 let isPlayer1Turn = true; // Player 1 Goes First
 let player1Scores = [] // Player 1 Scores
 let player2Scores = [] // Player 2 Scores
+mathQuestionLine.style.display = 'none'
 
 function generateMathQuestion() {
     const num1 = Math.floor(Math.random() * 50);
@@ -37,14 +38,37 @@ function handleSquareClick(event) {
     const square = event.target;
     const mathQuestion = generateMathQuestion();
     question.textContent = mathQuestion.question
-    const playerAnswer = prompt(`${mathQuestion.question} =`)
-    if (playerAnswer !== null && Number(playerAnswer) === mathQuestion.answer) {
-            correctAnswer(square)
-    } else {
-        wrongAnswer();
+    mathQuestionLine.style.display = 'initial'
+    square.style.border = '4px solid lime'
+    square.classList.add('clicked')
+    for (let square of allSquares) {
+        deactivateSquare(square) 
     }
-isPlayer1Turn = !isPlayer1Turn; // Toggle whose turn it is.
+
 }
+
+function getAnswer() {
+    const playerAnswer = Number(input.value);
+    const mathAnswer = eval(question.textContent)
+    input.value = ''; 
+    let square = document.querySelector('.clicked')
+    mathQuestionLine.style.display = 'none'
+    if (playerAnswer !== null && playerAnswer === mathAnswer) {
+            correctAnswer(square);
+    } else {
+        wrongAnswer(square);
+    }
+    isPlayer1Turn = !isPlayer1Turn;
+    square.classList.remove('clicked')
+    for (let square of allSquares) { 
+        square.style.border = '1px solid lime'
+        if (!square.classList.contains('completed'))
+        activateSquare(square);
+    }
+}
+
+answerButton.addEventListener('click', getAnswer)
+
 
 
 function checkForWinner() {
@@ -70,8 +94,9 @@ function correctAnswer(square) {
     } else {
         changeToNought(square); // Change to nought if Player 2 turn
     }
-deactivateSquare(square) // Remove cursor on clicked square
-checkForWinner()
+    deactivateSquare(square) // Remove cursor on clicked square
+    checkForWinner()
+    square.classList.add('completed')
 }
 
 function changeToCross(square) {
@@ -117,16 +142,18 @@ function draw() {
 function resetGame() {
     for (let square of allSquares) { // Cycle through all squares
         square.textContent = '' // Remove X's and O's
-        activateSquares(square)
+        activateSquare(square)
+        square.classList.remove('completed')
+        square.classList.remove('clicked')
     }
-    playersTurnMessage.textContent = `IT'S PLAYER 1'S TURN`
+    playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
     isPlayer1Turn = true
     player1Scores = []
     player2Scores = []
     resetButton.style.display = 'none' // Hide Reset Button
 }
 
-function activateSquares(square) {
+function activateSquare(square) {
     square.addEventListener('click', handleSquareClick) // Make squares clickable
     square.style.cursor = 'pointer' // Add cursor pointer to square
 }
@@ -145,21 +172,3 @@ function submitAnswer(playerAnswer) {
 }
 isPlayer1Turn = !isPlayer1Turn;
 }
-
-// answerButton.addEventListener('click', getAnswer)
-
-// function getAnswer(square) {
-//     const playerAnswer = Number(input.value);
-//     input.value = ''; 
-//     input.style.display = 'none'; 
-//     answerButton.style.display = 'none'; 
-//     if (!isNaN(playerAnswer)) { 
-//         if (playerAnswer === currentMathQuestion.answer) {
-//             correctAnswer(square);
-//         } else {
-//             wrongAnswer(square);
-//         }
-//         isPlayer1Turn = !isPlayer1Turn;
-//     }
-// }
-

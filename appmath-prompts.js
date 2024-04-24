@@ -121,7 +121,7 @@ function resetGame() {
         square.textContent = '' // Remove X's and O's
         activateSquares(square)
     }
-    playersTurnMessage.textContent = `IT'S PLAYER 1'S TURN`
+    playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
     isPlayer1Turn = true
     player1Scores = []
     player2Scores = []

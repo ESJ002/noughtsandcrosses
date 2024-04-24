@@ -52,7 +52,7 @@ body {
     background-color: rgb(0, 33, 0);
     font-family:'Orbitron';
     display: inline;
-    font-size: 15px;
+    font-size: 17px;
   }
 
 .math-q {
@@ -67,5 +67,5 @@ body {
     font-family:'Orbitron';
     width: 100px;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 17px;
   }

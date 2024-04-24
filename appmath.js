@@ -8,8 +8,8 @@ const mathQuestionLine = document.querySelector('.math-q') // Whole Question Lin
 const player1WinCount = document.querySelector('.player-1-wins')
 const player2WinCount = document.querySelector('.player-2-wins')  // Player 1 Win Counter
 const grid = document.querySelector('.grid') // Playing Area
-const difficultyButtons = document.querySelectorAll('.difficulty-btn')
-const difficultyHeader = document.querySelector('.difficulty')
+const difficultyButtons = document.querySelectorAll('.difficulty-btn') // Difficulty Buttons
+const difficultyHeader = document.querySelector('.difficulty') // Header Shwoing Difficulty Buttons
 const winCombinations = [
     ['1','2','3'], // Top Row
     ['4','5','6'], // Middle Row

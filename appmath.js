@@ -26,13 +26,12 @@ for (let square of allSquares) {
 }
 
 for (let button of difficultyButtons) {
-    button.addEventListener('click', selectDifficulty)
+    button.addEventListener('click', selectDifficulty) // Add event listener to difficulty buttons
 }
 
-function selectDifficulty(event) {
+function selectDifficulty(event) { // Select Difficulty
     button = event.target
-    mathDifficulty = button.dataset.difficulty
-    mathQuestionLine.style.display = 'initial'
+    mathDifficulty = button.dataset.difficulty // Grab Difficulty from button's dataset
     grid.style.display = 'grid'
     if (isPlayer1Turn) {
         playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
@@ -40,7 +39,6 @@ function selectDifficulty(event) {
         playersTurnMessage.textContent = `IT'S PLAYER 2 'S TURN`
     }
     difficultyHeader.style.display = 'none'
-    mathQuestionLine.style.display = 'none'
 }
 
 let isPlayer1Turn = true; // Player 1 Goes First
@@ -148,8 +146,6 @@ function wrongAnswer(square) {
 resetButton.addEventListener('click', resetGame)
 
 function winner(player) {
-   
-    debugger
     if (player === 'PLAYER 1') {;
         player1WinCount.textContent = Number(player1WinCount.textContent) + 1
     }

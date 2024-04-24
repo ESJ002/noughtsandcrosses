@@ -7,6 +7,9 @@ const input = document.querySelector('input') // Input Section
 const mathQuestionLine = document.querySelector('.math-q') // Whole Question Line
 const player1WinCount = document.querySelector('.player-1-wins')
 const player2WinCount = document.querySelector('.player-2-wins')  // Player 1 Win Counter
+const grid = document.querySelector('.grid') // Playing Area
+const difficultyButtons = document.querySelectorAll('.difficulty-btn')
+const difficultyHeader = document.querySelector('.difficulty')
 const winCombinations = [
     ['1','2','3'], // Top Row
     ['4','5','6'], // Middle Row
@@ -22,16 +25,36 @@ for (let square of allSquares) {
     activateSquare(square) // Add event listener click to all squares.
 }
 
+for (let button of difficultyButtons) {
+    button.addEventListener('click', selectDifficulty)
+}
+
+function selectDifficulty(event) {
+    button = event.target
+    mathDifficulty = button.dataset.difficulty
+    mathQuestionLine.style.display = 'initial'
+    grid.style.display = 'grid'
+    if (isPlayer1Turn) {
+        playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
+    } else {
+        playersTurnMessage.textContent = `IT'S PLAYER 2 'S TURN`
+    }
+    difficultyHeader.style.display = 'none'
+    mathQuestionLine.style.display = 'none'
+}
+
 let isPlayer1Turn = true; // Player 1 Goes First
 let player1Scores = [] // Player 1 Scores
 let player2Scores = [] // Player 2 Scores
 let player1Wins = 0
 let player2Wins = 0
+let mathDifficulty = 10
 mathQuestionLine.style.display = 'none'
+grid.style.display = 'none'
 
 function generateMathQuestion() {
-    const num1 = Math.floor(Math.random() * 50);
-    const num2 = Math.floor(Math.random() * 50);
+    const num1 = Math.floor(Math.random() * mathDifficulty);
+    const num2 = Math.floor(Math.random() * mathDifficulty);
     const operator = ['+', '-','*'][Math.floor(Math.random() * 3)];
     const question = `${num1} ${operator} ${num2}`
     const answer = eval(question);
@@ -48,7 +71,6 @@ function handleSquareClick(event) {
     for (let square of allSquares) {
         deactivateSquare(square) 
     }
-
 }
 
 function getAnswer() {
@@ -72,8 +94,6 @@ function getAnswer() {
 }
 
 answerButton.addEventListener('click', getAnswer)
-
-
 
 function checkForWinner() {
     let isWinner = false // Currently no winner
@@ -128,9 +148,8 @@ function wrongAnswer(square) {
 resetButton.addEventListener('click', resetGame)
 
 function winner(player) {
-    for (let square of allSquares) { //cycle through all squares
-        deactivateSquare(square) // Deactivate squares
-    }
+   
+    debugger
     if (player === 'PLAYER 1') {;
         player1WinCount.textContent = Number(player1WinCount.textContent) + 1
     }
@@ -138,12 +157,17 @@ function winner(player) {
         player2WinCount.textContent = Number(player2WinCount.textContent) + 1
     }
     playersTurnMessage.textContent = `${player} WINS!` // Add Winning Message
-    resetButton.style.display = 'initial' // Reveal Reset Button
+    resetButton.style.display = 'initial'
+    for (let square of allSquares) { //cycle through all squares
+        deactivateSquare(square)
+        square.classList.add('completed') // Deactivate squares
+    } // Reveal Reset Button
 }
 
 function draw() {
     for (let square of allSquares) { // Cycle through all squares
-        deactivateSquare(square) // Deactivate squares
+        deactivateSquare(square)
+        square.classList.add('completed') // Deactivate squares
     }
     playersTurnMessage.textContent = `IT'S A DRAW!` // Add Draw Message
     resetButton.style.display = 'initial' // Reveal Reset Button
@@ -156,15 +180,13 @@ function resetGame() {
         square.classList.remove('completed')
         square.classList.remove('clicked')
     }
-    
-    if (isPlayer1Turn) {
-        playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
-    } else {
-        playersTurnMessage.textContent = `IT'S PLAYER 2 'S TURN`
-    }
     player1Scores = []
     player2Scores = []
     resetButton.style.display = 'none' // Hide Reset Button
+    mathQuestionLine.style.display = 'none'
+    grid.style.display = 'none'
+    difficultyHeader.style.display = 'initial'
+    playersTurnMessage.textContent = `SELECT A DIFFICULTY`
 }
 
 function activateSquare(square) {
@@ -174,5 +196,5 @@ function activateSquare(square) {
 
 function deactivateSquare(square) {
     square.removeEventListener('click', handleSquareClick); // Make square unclickable
-    square.style.cursor = 'default' // Remove cursor pointer from square
+    square.style.cursor = 'default'
 }

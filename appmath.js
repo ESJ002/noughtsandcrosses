@@ -10,11 +10,11 @@ const player2WinCount = document.querySelector('.player-2-wins')  // Player 1 Wi
 const grid = document.querySelector('.grid') // Playing Area
 const difficultyButtons = document.querySelectorAll('.difficulty-btn') // Difficulty Buttons
 const difficultyHeader = document.querySelector('.difficulty') // Header Shwoing Difficulty Buttons
-const newGameAudio = new Audio('sound/new-game.wav')
-const buttonAudio = new Audio('sound/button.wav')
-const correctAudio = new Audio('sound/correct.wav')
-const wrongAudio = new Audio('sound/wrong.wav')
-const music = new Audio('sound/music.wav')
+const newGameAudio = new Audio('Sound/new-game.wav')
+const buttonAudio = new Audio('Sound/button.wav')
+const correctAudio = new Audio('Sound/correct.wav')
+const wrongAudio = new Audio('Sound/wrong.wav')
+const music = new Audio('Sound/music.wav')
 const playMusic = document.querySelector('.music')
 const timer = document.querySelector('.countdown')
 

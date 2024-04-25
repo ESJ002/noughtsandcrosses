@@ -72,7 +72,6 @@ function stopMusic() {
     playMusic.addEventListener('click', startMusic)
     playMusic.removeEventListener('click', stopMusic)
     playMusic.style.textDecoration = 'line-through'
-
 }
 
 

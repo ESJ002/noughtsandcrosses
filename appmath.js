@@ -1,23 +1,81 @@
+// MATH NOUGHTS AND CROSSES
+// DOM Declarations
+const grid = document.querySelector('.grid') // Playing Area
 const allSquares = document.querySelectorAll('.square'); // All Squares
-const resetButton = document.querySelector('.reset-btn') // Reset Button
+const playMusic = document.querySelector('.music') // Play Music Button
 const playersTurnMessage = document.querySelector('.player-turn') // Player Turn Message
 const question = document.querySelector('.question') // Math Question
-const answerButton = document.querySelector('.answer-btn') // Submit Button
 const input = document.querySelector('input') // Input Section
+const submitButton = document.querySelector('.answer-btn') // Submit Button
 const mathQuestionLine = document.querySelector('.math-q') // Whole Question Line
-const player1WinCount = document.querySelector('.player-1-wins')
-const player2WinCount = document.querySelector('.player-2-wins')  // Player 1 Win Counter
-const grid = document.querySelector('.grid') // Playing Area
+const player1WinCount = document.querySelector('.player-1-wins') // Player 1 Win Counter
+const player2WinCount = document.querySelector('.player-2-wins')  // Player 2 win Counter
+const resetButton = document.querySelector('.reset-btn') // Reset Button
 const difficultyButtons = document.querySelectorAll('.difficulty-btn') // Difficulty Buttons
-const difficultyHeader = document.querySelector('.difficulty') // Header Shwoing Difficulty Buttons
-const newGameAudio = new Audio('Sound/new-game.wav')
-const buttonAudio = new Audio('Sound/button.wav')
-const correctAudio = new Audio('Sound/correct.wav')
-const wrongAudio = new Audio('Sound/wrong.wav')
-const music = new Audio('Sound/music.wav')
-const playMusic = document.querySelector('.music')
-const timer = document.querySelector('.countdown')
+const difficultyHeader = document.querySelector('.difficulty') // Header Showing Difficulty Buttons
 
+// Audio Files
+const newGameAudio = new Audio('Sound/new-game.wav') // New Game Sound
+const buttonAudio = new Audio('Sound/button.wav') // Click Button Sound
+const correctAudio = new Audio('Sound/correct.wav') // Correct Answer Sound
+const wrongAudio = new Audio('Sound/wrong.wav') // Wrong Answer Sound
+const music = new Audio('Sound/music.wav') // Background Music
+
+// MUSIC FUNCTIONS
+// Start Music
+function startMusic() {
+    music.play()
+    music.loop = true
+    playMusic.removeEventListener('click', startMusic)
+    playMusic.addEventListener('click', stopMusic)
+    playMusic.style.textDecoration = 'initial'
+}
+
+// Stop Music
+function stopMusic() {
+    music.pause()
+    playMusic.addEventListener('click', startMusic)
+    playMusic.removeEventListener('click', stopMusic)
+    playMusic.style.textDecoration = 'line-through'
+}
+
+// Add event listener to Music button
+playMusic.addEventListener('click', startMusic)
+
+
+
+// HOMESCREEN FUNCTIONS
+// Select Difficulty Function
+function selectDifficulty(event) {
+    button = event.target
+    mathDifficulty = button.dataset.difficulty 
+    grid.style.display = 'grid'
+    if (isPlayer1Turn) {
+        playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
+    } else {
+        playersTurnMessage.textContent = `IT'S PLAYER 2 'S TURN`
+    }
+    difficultyHeader.style.display = 'none'
+    newGameAudio.play();
+}
+
+// Add event listener to difficulty buttons
+for (let button of difficultyButtons) {
+    button.addEventListener('click', selectDifficulty) 
+}
+
+// GAME STARTUP
+// Game Startup Variable States
+let isPlayer1Turn = true; 
+let player1Scores = [] 
+let player2Scores = [] 
+let player1Wins = 0 
+let player2Wins = 0 
+let mathDifficulty = 10 
+mathQuestionLine.style.display = 'none' 
+grid.style.display = 'none' 
+
+// Winning Combinations Declaration
 const winCombinations = [
     ['1','2','3'], // Top Row
     ['4','5','6'], // Middle Row
@@ -29,55 +87,26 @@ const winCombinations = [
     ['3','5','7'], // Diagonal Right-Left
 ]
 
+// Activate Squares Function
+function activateSquare(square) {
+    square.addEventListener('click', handleSquareClick) 
+    square.style.cursor = 'pointer' 
+}
+
+// Deactivate Squares Function
+function deactivateSquare(square) {
+    square.removeEventListener('click', handleSquareClick); 
+    square.style.cursor = 'default'
+}
+
+// Add event listener click to all squares.
 for (let square of allSquares) {
-    activateSquare(square) // Add event listener click to all squares.
-}
-
-for (let button of difficultyButtons) {
-    button.addEventListener('click', selectDifficulty) // Add event listener to difficulty buttons
-}
-
-function selectDifficulty(event) { // Select Difficulty
-    button = event.target
-    mathDifficulty = button.dataset.difficulty // Grab Difficulty from button's dataset
-    grid.style.display = 'grid'
-    if (isPlayer1Turn) {
-        playersTurnMessage.textContent = `IT'S PLAYER 1 'S TURN`
-    } else {
-        playersTurnMessage.textContent = `IT'S PLAYER 2 'S TURN`
-    }
-    difficultyHeader.style.display = 'none'
-    newGameAudio.play();
-}
-
-let isPlayer1Turn = true; // Player 1 Goes First
-let player1Scores = [] // Player 1 Scores
-let player2Scores = [] // Player 2 Scores
-let player1Wins = 0
-let player2Wins = 0
-let mathDifficulty = 10
-mathQuestionLine.style.display = 'none'
-grid.style.display = 'none'
-
-function startMusic() {
-    music.play()
-    music.loop = true
-    playMusic.removeEventListener('click', startMusic)
-    playMusic.addEventListener('click', stopMusic)
-    playMusic.style.textDecoration = 'initial'
-}
-
-function stopMusic() {
-    music.pause()
-    playMusic.addEventListener('click', startMusic)
-    playMusic.removeEventListener('click', stopMusic)
-    playMusic.style.textDecoration = 'line-through'
+    activateSquare(square) 
 }
 
 
-playMusic.addEventListener('click', startMusic)
-
-
+// GAMEPLAY FUNCTIONS
+// Generate Math Question Function
 function generateMathQuestion() {
     const num1 = Math.floor(Math.random() * mathDifficulty + 1);
     const num2 = Math.floor(Math.random() * mathDifficulty + 1);
@@ -87,6 +116,7 @@ function generateMathQuestion() {
     return { question, answer };
 }
 
+// Square Click Function
 function handleSquareClick(event) {
     buttonAudio.play()
     const square = event.target;
@@ -101,6 +131,7 @@ function handleSquareClick(event) {
     buttonAudio.play()
 }
 
+// Answer Check Function
 function getAnswer() {
     const playerAnswer = Number(input.value);
     const mathAnswer = eval(question.textContent.replace('×','*'))
@@ -108,7 +139,7 @@ function getAnswer() {
     let square = document.querySelector('.clicked')
     mathQuestionLine.style.display = 'none'
     if (playerAnswer !== null && playerAnswer === mathAnswer) {
-            correctAnswer(square);
+        correctAnswer(square);
     } else {
         wrongAnswer(square);
     }
@@ -121,51 +152,40 @@ function getAnswer() {
     }
 }
 
-answerButton.addEventListener('click', getAnswer)
+// Add Event Listener to Submit Button
+submitButton.addEventListener('click', getAnswer)
 
-function checkForWinner() {
-    let isWinner = false // Currently no winner
-    for (let combination of winCombinations) { // Cycle through all win combinations
-        if (player1Scores.includes(combination[0]) && player1Scores.includes(combination[1]) && player1Scores.includes(combination[2])) { // Check if Player 1 has a winning combination
-            winner('PLAYER 1'); // Invoke Winner function with Player 1
-            isWinner = true; // There is a winner
-        } 
-        if (player2Scores.includes(combination[0]) && player2Scores.includes(combination[1]) && player2Scores.includes(combination[2])) { // Check if Player 2 has a winning combination
-            winner('PLAYER 2'); // Invoke Winner function with Player 2
-            isWinner = true; // There is a winner
-        }
-        if (player1Scores.length === 5 && player2Scores.length === 4 && isWinner === false || player1Scores.length === 4 && player2Scores.length === 5 && isWinner === false) { // Check if player scores have reached limit & there's still no winner
-            draw() // Invoke the Draw function
-        }
-    }
-}
-
+// POST ANSWER CHECK FUNCTIONS
+// Correct Answer Function
 function correctAnswer(square) {
     if (isPlayer1Turn) {
-        changeToCross(square); // Change to cross if Player 1 turn
+        changeToCross(square); 
     } else {
-        changeToNought(square); // Change to nought if Player 2 turn
+        changeToNought(square); 
     }
-    deactivateSquare(square) // Remove cursor on clicked square
+    deactivateSquare(square) 
     checkForWinner()
     square.classList.add('completed')
     correctAudio.play();
 }
 
+// Player 1 Correct Function
 function changeToCross(square) {
-    square.style.color = 'lime'; // Color to Lime
-    square.textContent = 'X' // Insert 'X'
-    player1Scores.push(square.dataset.num) // Add square to Player 1 scores.
-    playersTurnMessage.textContent = `CORRECT! IT'S PLAYER 2 'S TURN` // Change Turn Text
+    square.style.color = 'lime'; 
+    square.textContent = 'X' 
+    player1Scores.push(square.dataset.num) 
+    playersTurnMessage.textContent = `CORRECT! IT'S PLAYER 2 'S TURN` 
 }
 
+// Player 2 Correct Function
 function changeToNought(square) {
-    square.style.color = 'red'; // Color to Red
-    square.textContent = 'O' // Insert 'O'
-    player2Scores.push(square.dataset.num) // Add square to Player 2 scores.
-    playersTurnMessage.textContent = `CORRECT! IT'S PLAYER 1 'S TURN` // Change Turn Text
+    square.style.color = 'red'; 
+    square.textContent = 'O';
+    player2Scores.push(square.dataset.num);
+    playersTurnMessage.textContent = `CORRECT! IT'S PLAYER 1 'S TURN` 
 }
 
+// Wrong Answer Function
 function wrongAnswer(square) {
     if (isPlayer1Turn) {
         playersTurnMessage.textContent = `WRONG! IT'S PLAYER 2 'S TURN`
@@ -175,8 +195,26 @@ function wrongAnswer(square) {
     wrongAudio.play();
 }
 
-resetButton.addEventListener('click', resetGame)
+// Winner Check Function
+function checkForWinner() {
+    let isWinner = false 
+    for (let combination of winCombinations) { 
+        if (player1Scores.includes(combination[0]) && player1Scores.includes(combination[1]) && player1Scores.includes(combination[2])) { // Check if Player 1 has a winning combination
+            winner('PLAYER 1'); 
+            isWinner = true; 
+        } 
+        if (player2Scores.includes(combination[0]) && player2Scores.includes(combination[1]) && player2Scores.includes(combination[2])) { // Check if Player 2 has a winning combination
+            winner('PLAYER 2'); 
+            isWinner = true; 
+        }
+        if (player1Scores.length === 5 && player2Scores.length === 4 && isWinner === false || player1Scores.length === 4 && player2Scores.length === 5 && isWinner === false) { // Check if player scores have reached limit & there's still no winner
+            draw() 
+        }
+    }
+}
 
+// GAME RESULT FUNCTIONS
+// Winner Function
 function winner(player) {
     if (player === 'PLAYER 1') {;
         player1WinCount.textContent = Number(player1WinCount.textContent) + 1
@@ -184,46 +222,41 @@ function winner(player) {
     if (player === 'PLAYER 2') {;
         player2WinCount.textContent = Number(player2WinCount.textContent) + 1
     }
-    playersTurnMessage.textContent = `${player} WINS!` // Add Winning Message
+    playersTurnMessage.textContent = `${player} WINS!` 
     resetButton.style.display = 'initial'
-    for (let square of allSquares) { //cycle through all squares
+    for (let square of allSquares) { 
         deactivateSquare(square)
-        square.classList.add('completed') // Deactivate squares
-    } // Reveal Reset Button
+        square.classList.add('completed') 
+    } 
 }
 
+// Draw Function
 function draw() {
-    for (let square of allSquares) { // Cycle through all squares
+    for (let square of allSquares) { 
         deactivateSquare(square)
-        square.classList.add('completed') // Deactivate squares
+        square.classList.add('completed') 
     }
-    playersTurnMessage.textContent = `IT'S A DRAW!` // Add Draw Message
-    resetButton.style.display = 'initial' // Reveal Reset Button
+    playersTurnMessage.textContent = `IT'S A DRAW!` 
+    resetButton.style.display = 'initial' 
 }
 
+// Reset Game Function
 function resetGame() {
-    for (let square of allSquares) { // Cycle through all squares
-        square.textContent = '' // Remove X's and O's
+    for (let square of allSquares) { 
+        square.textContent = '' 
         activateSquare(square)
         square.classList.remove('completed')
         square.classList.remove('clicked')
     }
     player1Scores = []
     player2Scores = []
-    resetButton.style.display = 'none' // Hide Reset Button
+    resetButton.style.display = 'none' 
     mathQuestionLine.style.display = 'none'
     grid.style.display = 'none'
     difficultyHeader.style.display = 'initial'
     playersTurnMessage.textContent = `SELECT A DIFFICULTY`
-    buttonAudio.play()
+    wrongAudio.play()
 }
 
-function activateSquare(square) {
-    square.addEventListener('click', handleSquareClick) // Make squares clickable
-    square.style.cursor = 'pointer' // Add cursor pointer to square
-}
-
-function deactivateSquare(square) {
-    square.removeEventListener('click', handleSquareClick); // Make square unclickable
-    square.style.cursor = 'default'
-}
+// Add Event Listener to Reset Button
+resetButton.addEventListener('click', resetGame)

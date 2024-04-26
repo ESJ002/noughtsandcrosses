@@ -3,18 +3,53 @@
 }
 
 body {
-    background-color: rgb(0, 33, 0);
-    font-family:'Orbitron';
-    color: lime
+  background-color: rgb(0, 33, 0);
+  
 }
 
 .page-container {
-    text-align: center;
-    color: lime;
+  text-align: center;
+  color: lime;
+  font-family:'Orbitron';
+}
+
+.music {
+  float: right;
+  margin: 8px;
+  font-size: 20px;
+  text-decoration: line-through;
+}
+
+.win-counter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 500px;
+  margin: 0 auto;
+  margin-bottom: 0;
+}
+
+h4 {
+  margin: 0
+}
+
+.O {
+  color: red;
+}
+
+.difficulty button {
+  cursor: pointer;
+  color: lime;
+  border: 2px solid lime;
+  background-color: rgb(0, 33, 0);
+  font-family:'Orbitron';
+  display: inline;
+  font-size: 17px;
+  margin: 0 3px;
+  font-weight: bold;
 }
 
 .grid {
-    display: grid;
+  display: grid;
     grid-template-columns: repeat(3, 1fr);
     height: 150px;
     width: 150px;
@@ -31,19 +66,22 @@ body {
     font-weight: bold;
     font-size: larger;
   }
-
-  .reset-btn {
-    cursor: pointer;
-    margin-top: 20px;
-    color: lime;
-    border: 2px solid lime;
-    background-color: rgb(0, 33, 0);
-    font-family:'Orbitron';
-    display: none;
+  
+  .math-q {
     font-size: 15px;
-    font-weight: bold;
   }
-
+  
+  input {
+    display: inline-block;
+    background-color: rgb(0, 33, 0);
+    border: 2px solid lime;
+    color: lime;
+    font-family:'Orbitron';
+    width: 100px;
+    font-weight: bold;
+    font-size: 17px;
+  }
+  
   .answer-btn {
     cursor: pointer;
     margin-top: 10px;
@@ -55,53 +93,15 @@ body {
     font-size: 17px;
     font-weight: bold;
   }
-
-.math-q {
-    font-size: 15px;
-}
-
-  input {
-    display: inline-block;
-    background-color: rgb(0, 33, 0);
-    border: 2px solid lime;
+  
+  .reset-btn {
+    cursor: pointer;
+    margin-top: 20px;
     color: lime;
+    border: 2px solid lime;
+    background-color: rgb(0, 33, 0);
     font-family:'Orbitron';
-    width: 100px;
+    display: none;
+    font-size: 15px;
     font-weight: bold;
-    font-size: 17px;
-  }
-
-  .win-counter {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 500px;
-    margin: 0 auto;
-    margin-bottom: 0;
-  }
-
-  h4 {
-    margin: 0
-  }
-
-  .difficulty button {
-      cursor: pointer;
-      color: lime;
-      border: 2px solid lime;
-      background-color: rgb(0, 33, 0);
-      font-family:'Orbitron';
-      display: inline;
-      font-size: 17px;
-      margin: 0 3px;
-      font-weight: bold;
-  }
-
-  .music {
-    float: right;
-    margin: 8px;
-    font-size: 20px;
-    text-decoration: line-through;
-  }
-
-  .O {
-    color: red;
   }
